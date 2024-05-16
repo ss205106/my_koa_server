@@ -6,7 +6,8 @@ const Joi = require('joi')
 exports.register = async(ctx,next) => {
     const schema = Joi.object().keys({
         username: Joi.string().min(3).max(20).regex(/^[a-zA-Z0-9!@#$%^&*]+$/).required(),
-        password: Joi.string().min(3).max(20).regex(/^[a-zA-Z0-9!@#$%^&*]+$/).required()
+        password: Joi.string().min(3).max(20).regex(/^[a-zA-Z0-9!@#$%^&*]+$/).required(),
+        email: Joi.string().email().required()
     })
     
     const result = schema.validate(ctx.request.body) //글러브?
@@ -15,7 +16,7 @@ exports.register = async(ctx,next) => {
         ctx.body = result.error
         return;
     }
-    const {username,password} = ctx.request.body; // 여기다 심는다 ? client(frontend) 에서 던져주는 데이터( post)
+    const {username,password,email} = ctx.request.body; // 여기다 심는다 ? client(frontend) 에서 던져주는 데이터( post)
     try{
         //몽고디비 명령어 함수작성한거 넣어준거임
         //User 클래스 정적함수 
@@ -26,7 +27,7 @@ exports.register = async(ctx,next) => {
         }
         //객체 선언 
         const user = new User({
-            username,
+            username,email
         });
         //객체 user 메소드 함수 
         await user.setPassword(password)
@@ -50,19 +51,22 @@ exports.register = async(ctx,next) => {
 
 exports.login = async(ctx,next) => {
     const {username,password} = ctx.request.body
+    //데이터가 없을때 오류 
     if(!username || !password){
         ctx.status = 401 //너잘못 unauthorized 노 권환
         return;
     }
     try{
-        //클래스로 사용하는 함수
+        //클래스로 사용하는 함수 id 찾아줌 
         const user = await User.findByUsername(username)
+        //id 가 없을때 오류
         if(!user){
             ctx.status = 401 // 권한 없음
             return;
         }
-        //객체로 사용하는 함수 
+        //객체로 사용하는 함수 pwd를 찾아줌 
         const valid = await user.checkPassword(password);
+        //pwd가 없을때
         if(!valid){
             ctx.status = 401 //unauthorized
             return;

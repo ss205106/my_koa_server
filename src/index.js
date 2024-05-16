@@ -7,9 +7,8 @@ const jwtMiddleware = require('./libs/jwtMiddleware')
 
 const api = require('./api') // 인덱스가 빠져있는거임 주소에 index는 안써도 암묵적으로 들어감
 
-
 //환경파일 가져오기
-const {PORT,MONGO_URI} = process.env    
+const {PORT,MONGO_URI} = process.env
 
 //몽고db연결   몽고db식 연결방법
 mongoose

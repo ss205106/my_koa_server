@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const UserSchema = new Schema({    //테이블 키의 타입을 정함 뭐 받을건지 설정하기
     username: String,
     hashedPassword : String,
+    email:String
 })
 //hash 패스워드 암호화 한다 
 UserSchema.methods.setPassword = async function(password){
@@ -36,7 +37,7 @@ UserSchema.methods.generateToken = function(){
     return token
 }
 
-const User = mongoose.model('User',UserSchema,"UserCollection")
+const User = mongoose.model('User',UserSchema,"UserTable")
 //테이블 넣기 "post"이 있어도 "postCollection"을 쓰면 겉으로 보이는 이름은 postCollectiondl이거임
 
 module.exports = User ;  //export defalt
