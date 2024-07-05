@@ -11,4 +11,3 @@ koa서버
 ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
 
 </details>
-출처: https://hulrud.tistory.com/3 [주독야독:티스토리]
